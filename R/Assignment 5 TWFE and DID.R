@@ -80,7 +80,7 @@ hist(simdata$te, freq = FALSE, breaks = 200, main = "Distribution of Treatment E
 
 qje = summary(simdata$te)
 
-te_dist[1] = data.frame(as.numeric(qje[1]))
+te_dist = data.frame(as.numeric(qje[1]))
 te_dist[2] = as.numeric(qje[2])
 te_dist[3] = as.numeric(qje[3])
 te_dist[4] = as.numeric(qje[4])
@@ -95,3 +95,22 @@ rtffile <- RTF("Tables/DID_dist_te.rtf")
 addText.RTF(this = rtffile, "Dist of TE\n\n", bold = TRUE)
 addTable.RTF(this = rtffile, dat = te_dist)
 done(rtffile)
+
+
+
+reg_prob_5 = lm(y~treat+group+year, data = simdata)
+summary(reg_prob_5)
+
+
+library(lfe)
+
+fe_reg = felm(y~treat|year+id , data = simdata)
+summary(fe_reg)
+
+tab_model(fe_reg, dv.labels = "Fixed Effects", file = "Tables/DID_Prob_5.rtf", title = "Assignment 5 DID Problem 5", show.r2 = FALSE, show.p = FALSE, p.style = "stars", show.intercept = FALSE, show.ci = FALSE, show.se = TRUE, collapse.se = TRUE)
+
+
+#Problem 7
+fe_reg_2 = felm(y2~treat|year+id , data = simdata)
+summary(fe_reg_2)
+
