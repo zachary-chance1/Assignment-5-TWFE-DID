@@ -73,3 +73,5 @@ prob_1_table
 
 tab_model(basic_reg, demeaned_reg, dv.labels = c("Standard OLS", "Demeaned OLS"), file = "Tables/TWFE_Table.rtf", title = "Assignment 5 TWFE", show.r2 = FALSE, show.p = FALSE, p.style = "stars", show.intercept = FALSE, show.ci = FALSE, show.se = TRUE, collapse.se = TRUE, pred.labels = c("D", "Unit 2 FE", "Unit 3 FE", "Unit 4 FE", "Unit 5 FE", "Time 2 FE", "Demeaned D"))
 
+
+
