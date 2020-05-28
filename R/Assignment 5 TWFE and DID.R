@@ -120,9 +120,15 @@ tab_model(fe_reg_2, dv.labels = "Fixed Effects WIth Dynamic TE", file = "Tables/
 
 #problem 9
 
+
+
+#past this point, everything is a failed experiment. I leave it to show that I did make a good faith effort to attempt problem 9
+
 library(did)
 
 #for 2006
+simdata = as.data.frame(simdata)
+
 
 CS_out_06 <- att_gt("y2", data = simdata,
                  first.treat.name="treat",
@@ -133,6 +139,30 @@ CS_out_06 <- att_gt("y2", data = simdata,
                  mine = -4,
                  nevertreated = TRUE,
                  printdetails = TRUE)
+CS_Out_06 = mp.spatt(y2~treat, data = simdata,
+                     tname = "year", idname = "id", panel = TRUE,
+                     first.treat.name="treat_date", 
+                     printdetails = TRUE, bstrap = TRUE, aggte = FALSE)
 
 
+simdata <- within(simdata, ypost <- y2)
+simdata[!(simdata$year == 2007), "ypost"] <- 0
+
+simdata <- within(simdata, ypre <- y2)
+simdata[!(simdata$year == 2003), "ypre"] <- 0
+
+simdata <- within(simdata, g1 <- 1)
+simdata[!(simdata$group == 2003), "ypre"] <- 0
+
+
+
+simdata$time_til = simdata$year - simdata$treat_date
+
+
+for(i in seq(1:dim(simdata)[1])){
+  if(((simdata$year[i] == 1985) | (simdata$year[i]==1986)) & ((simdata$group[i] == 1) | (simdata$time_til[i] < 0))){
+    felm(y2~treat|id+year, data = simdata)
+  }
+  
+}
 
