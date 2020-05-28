@@ -73,5 +73,25 @@ prob_1_table
 
 tab_model(basic_reg, demeaned_reg, dv.labels = c("Standard OLS", "Demeaned OLS"), file = "Tables/TWFE_Table.rtf", title = "Assignment 5 TWFE", show.r2 = FALSE, show.p = FALSE, p.style = "stars", show.intercept = FALSE, show.ci = FALSE, show.se = TRUE, collapse.se = TRUE, pred.labels = c("D", "Unit 2 FE", "Unit 3 FE", "Unit 4 FE", "Unit 5 FE", "Time 2 FE", "Demeaned D"))
 
+simdata = read_dta("Data/simulation.dta")
 
 
+hist(simdata$te, freq = FALSE, breaks = 200, main = "Distribution of Treatment Effects", xlab = "Treatment Effect (TE)")
+
+qje = summary(simdata$te)
+
+te_dist[1] = data.frame(as.numeric(qje[1]))
+te_dist[2] = as.numeric(qje[2])
+te_dist[3] = as.numeric(qje[3])
+te_dist[4] = as.numeric(qje[4])
+te_dist[5] = as.numeric(qje[5])
+te_dist[6] = as.numeric(qje[6])
+te_dist[7] = as.numeric(qje[7])
+colnames(te_dist) = c("Min", "1st Qtl", "Median", "Mean", "3rd Qtl", "Max", "NAs")
+te_dist = round(te_dist, digits = 4)
+
+library(rtf)
+rtffile <- RTF("Tables/DID_dist_te.rtf")
+addText.RTF(this = rtffile, "Dist of TE\n\n", bold = TRUE)
+addTable.RTF(this = rtffile, dat = te_dist)
+done(rtffile)
