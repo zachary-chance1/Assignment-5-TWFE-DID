@@ -3,7 +3,7 @@
 #author: zachary chance (baylor university)
 #description: completes assignment 5 and performs analysis
 #             on the assigned data under TWFE and DID scenarios
-#date: may 27, 2020
+#date: may 28, 2020
 #################################################################
 
 
@@ -110,7 +110,29 @@ summary(fe_reg)
 tab_model(fe_reg, dv.labels = "Fixed Effects", file = "Tables/DID_Prob_5.rtf", title = "Assignment 5 DID Problem 5", show.r2 = FALSE, show.p = FALSE, p.style = "stars", show.intercept = FALSE, show.ci = FALSE, show.se = TRUE, collapse.se = TRUE)
 
 
+
+
 #Problem 7
 fe_reg_2 = felm(y2~treat|year+id , data = simdata)
 summary(fe_reg_2)
+
+tab_model(fe_reg_2, dv.labels = "Fixed Effects WIth Dynamic TE", file = "Tables/DID_Prob_7.rtf", title = "Assignment 5 DID Problem 7", show.r2 = FALSE, show.p = FALSE, p.style = "stars", show.intercept = FALSE, show.ci = FALSE, show.se = TRUE, collapse.se = TRUE)
+
+#problem 9
+
+library(did)
+
+#for 2006
+
+CS_out_06 <- att_gt("y2", data = simdata,
+                 first.treat.name="treat",
+                 idname="id", tname="year", aggte = T,
+                 clustervars = c("id","year"),
+                 bstrap=T, cband=T,
+                 maxe = 6,
+                 mine = -4,
+                 nevertreated = TRUE,
+                 printdetails = TRUE)
+
+
 
